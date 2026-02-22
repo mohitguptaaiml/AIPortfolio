@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RETRO CALC | Mohit's Portfolio</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Press+Start+2P&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --green: #00ff41;
+            --green-dim: #00cc33;
+            --green-dark: #001a00;
+            --green-faint: #00ff4108;
+            --green-glow: rgba(0, 255, 65, 0.35);
+            --bg: #0a0f0a;
+            --card-bg: #050d05;
+            --border: #1a3a1a;
+            --muted: #4a8a4a;
+            --white: #e0ffe0;
+            --red: #ff3333;
+            --font-mono: 'Share Tech Mono', monospace;
+            --font-vt: 'VT323', monospace;
+            --font-pixel: 'Press Start 2P', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--green);
+            font-family: var(--font-mono);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 2rem;
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 65, 0.02) 2px, rgba(0, 255, 65, 0.02) 4px);
+        }
+
+        .back-link {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            letter-spacing: 1px;
+        }
+
+        .back-link:hover {
+            color: var(--green);
+            border-color: var(--green);
+            box-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .calc-header {
+            font-family: var(--font-pixel);
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 3px;
+            text-align: center;
+        }
+
+        .calc-header span {
+            color: var(--green);
+        }
+
+        .calc {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            width: 340px;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .calc-title-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot.r {
+            background: #ff5f57;
+        }
+
+        .dot.y {
+            background: #febc2e;
+        }
+
+        .dot.g {
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+        }
+
+        .calc-title-bar span {
+            margin-left: auto;
+            font-family: var(--font-pixel);
+            font-size: 6px;
+            color: var(--muted);
+            letter-spacing: 1px;
+        }
+
+        .display {
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: right;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .display-expr {
+            font-size: 12px;
+            color: var(--muted);
+            min-height: 18px;
+            word-break: break-all;
+            letter-spacing: 1px;
+        }
+
+        .display-val {
+            font-family: var(--font-vt);
+            font-size: 3rem;
+            color: var(--green);
+            text-shadow: 0 0 15px var(--green);
+            word-break: break-all;
+            line-height: 1;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .btn-calc {
+            background: var(--green-dark);
+            border: 1px solid var(--border);
+            color: var(--white);
+            font-family: var(--font-mono);
+            font-size: 16px;
+            padding: 14px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.1s;
+            text-align: center;
+            user-select: none;
+        }
+
+        .btn-calc:hover {
+            background: #003300;
+            border-color: var(--green-dim);
+            color: var(--green);
+            box-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .btn-calc:active {
+            transform: scale(0.95);
+            background: #004400;
+        }
+
+        .btn-calc.op {
+            color: var(--green);
+            border-color: var(--green-dim);
+        }
+
+        .btn-calc.eq {
+            background: var(--green);
+            color: #000;
+            border-color: var(--green);
+            font-weight: bold;
+        }
+
+        .btn-calc.eq:hover {
+            background: #00cc33;
+            box-shadow: 0 0 20px var(--green-glow);
+        }
+
+        .btn-calc.clr {
+            color: var(--red);
+            border-color: #3a1010;
+        }
+
+        .btn-calc.clr:hover {
+            background: #1a0000;
+            border-color: var(--red);
+        }
+
+        .btn-calc.wide {
+            grid-column: span 2;
+        }
+
+        .kbd-hint {
+            text-align: center;
+            font-family: var(--font-pixel);
+            font-size: 6px;
+            color: var(--border);
+            letter-spacing: 1px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../../index.html" class="back-link">← BACK TO PORTFOLIO</a>
+    <div class="calc-header">// <span>RETRO_CALC</span>.exe — v1.0.0</div>
+    <div class="calc">
+        <div class="calc-title-bar">
+            <div class="dot r"></div>
+            <div class="dot y"></div>
+            <div class="dot g"></div>
+            <span>CALCULATOR.exe</span>
+        </div>
+        <div class="display">
+            <div class="display-expr" id="expr"></div>
+            <div class="display-val" id="display">0</div>
+        </div>
+        <div class="buttons">
+            <button class="btn-calc clr" onclick="clearAll()">AC</button>
+            <button class="btn-calc clr" onclick="toggleSign()">+/-</button>
+            <button class="btn-calc clr" onclick="percentage()">%</button>
+            <button class="btn-calc op" onclick="op('/')">÷</button>
+
+            <button class="btn-calc" onclick="num('7')">7</button>
+            <button class="btn-calc" onclick="num('8')">8</button>
+            <button class="btn-calc" onclick="num('9')">9</button>
+            <button class="btn-calc op" onclick="op('*')">×</button>
+
+            <button class="btn-calc" onclick="num('4')">4</button>
+            <button class="btn-calc" onclick="num('5')">5</button>
+            <button class="btn-calc" onclick="num('6')">6</button>
+            <button class="btn-calc op" onclick="op('-')">−</button>
+
+            <button class="btn-calc" onclick="num('1')">1</button>
+            <button class="btn-calc" onclick="num('2')">2</button>
+            <button class="btn-calc" onclick="num('3')">3</button>
+            <button class="btn-calc op" onclick="op('+')">+</button>
+
+            <button class="btn-calc wide" onclick="num('0')">0</button>
+            <button class="btn-calc" onclick="dot()">.</button>
+            <button class="btn-calc eq" onclick="equals()">=</button>
+        </div>
+        <div class="kbd-hint">KEYBOARD SUPPORTED · ESC = CLEAR</div>
+    </div>
+
+    <script>
+        let current = '0', prev = '', operator = '', justEvaled = false;
+
+        const display = document.getElementById('display');
+        const expr = document.getElementById('expr');
+
+        function update() {
+            display.textContent = current.length > 12 ? parseFloat(current).toExponential(5) : current;
+        }
+
+        function num(n) {
+            if (justEvaled) { current = n; justEvaled = false; }
+            else current = current === '0' ? n : current + n;
+            if (current.length > 15) current = current.slice(0, 15);
+            update();
+        }
+
+        function dot() {
+            if (justEvaled) { current = '0.'; justEvaled = false; update(); return; }
+            if (!current.includes('.')) { current += '.'; update(); }
+        }
+
+        function op(o) {
+            if (operator && !justEvaled) equals();
+            prev = current; operator = o; justEvaled = false;
+            const sym = { '+': '+', '-': '−', '*': '×', '/': '÷' }[o];
+            expr.textContent = `${prev} ${sym}`;
+        }
+
+        function equals() {
+            if (!operator || !prev) return;
+            const a = parseFloat(prev), b = parseFloat(current);
+            const sym = { '+': '+', '-': '−', '*': '×', '/': '÷' }[operator];
+            expr.textContent = `${prev} ${sym} ${current} =`;
+            let result;
+            switch (operator) {
+                case '+': result = a + b; break;
+                case '-': result = a - b; break;
+                case '*': result = a * b; break;
+                case '/': result = b === 0 ? 'ERR:DIV/0' : a / b; break;
+            }
+            current = typeof result === 'number' ? String(parseFloat(result.toFixed(10))) : result;
+            operator = ''; prev = ''; justEvaled = true;
+            update();
+        }
+
+        function clearAll() { current = '0'; prev = ''; operator = ''; justEvaled = false; expr.textContent = ''; update(); }
+        function toggleSign() { current = String(parseFloat(current) * -1); update(); }
+        function percentage() { current = String(parseFloat(current) / 100); update(); }
+
+        document.addEventListener('keydown', e => {
+            if (e.key >= '0' && e.key <= '9') num(e.key);
+            else if (e.key === '.') dot();
+            else if (['+', '-', '*', '/'].includes(e.key)) op(e.key);
+            else if (e.key === 'Enter' || e.key === '=') equals();
+            else if (e.key === 'Escape') clearAll();
+            else if (e.key === 'Backspace') {
+                if (current.length > 1) current = current.slice(0, -1);
+                else current = '0';
+                update();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TASK_MANAGER | Mohit's Portfolio</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Press+Start+2P&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --green: #00ff41;
+            --green-dim: #00cc33;
+            --green-dark: #001a00;
+            --green-faint: #00ff4108;
+            --green-glow: rgba(0, 255, 65, 0.35);
+            --bg: #0a0f0a;
+            --card-bg: #050d05;
+            --border: #1a3a1a;
+            --muted: #4a8a4a;
+            --white: #e0ffe0;
+            --red: #ff3333;
+            --font-mono: 'Share Tech Mono', monospace;
+            --font-vt: 'VT323', monospace;
+            --font-pixel: 'Press Start 2P', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: var(--font-mono);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem 4rem;
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 65, 0.02) 2px, rgba(0, 255, 65, 0.02) 4px);
+        }
+
+        .back-link {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            letter-spacing: 1px;
+            z-index: 99;
+        }
+
+        .back-link:hover {
+            color: var(--green);
+            border-color: var(--green);
+            box-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            margin-top: 1rem;
+        }
+
+        .header h1 {
+            font-family: var(--font-vt);
+            font-size: 3rem;
+            color: var(--green);
+            text-shadow: 0 0 20px var(--green);
+            letter-spacing: 4px;
+        }
+
+        .header p {
+            font-family: var(--font-pixel);
+            font-size: 7px;
+            color: var(--muted);
+            margin-top: 6px;
+            letter-spacing: 2px;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 620px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.05);
+        }
+
+        .card-header {
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            color: var(--green);
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .task-input {
+            flex: 1;
+            background: #000;
+            border: 1px solid var(--border);
+            color: var(--white);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            padding: 10px 14px;
+            border-radius: 4px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .task-input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 12px var(--green-glow);
+        }
+
+        .task-input::placeholder {
+            color: var(--muted);
+        }
+
+        .priority-sel {
+            background: #000;
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-family: var(--font-pixel);
+            font-size: 7px;
+            padding: 0 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .add-btn {
+            background: var(--green);
+            color: #000;
+            border: none;
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            padding: 10px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .add-btn:hover {
+            background: #00cc33;
+            box-shadow: 0 0 15px var(--green-glow);
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-chip {
+            background: var(--green-faint);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: var(--font-pixel);
+            font-size: 7px;
+            color: var(--muted);
+        }
+
+        .stat-chip span {
+            color: var(--green);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-family: var(--font-pixel);
+            font-size: 7px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 1px;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            color: var(--green);
+            border-color: var(--green);
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 80px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 12px 14px;
+            transition: all 0.25s;
+            animation: slideIn 0.2s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .task-item:hover {
+            border-color: var(--green-dim);
+            background: #030f03;
+        }
+
+        .task-item.done {
+            opacity: 0.5;
+        }
+
+        .task-item.done .task-text {
+            text-decoration: line-through;
+            color: var(--muted);
+        }
+
+        .check-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--green-dim);
+            background: transparent;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            font-size: 12px;
+        }
+
+        .check-btn.checked {
+            background: var(--green);
+            border-color: var(--green);
+            color: #000;
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .priority-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .p-high {
+            background: var(--red);
+            box-shadow: 0 0 6px var(--red);
+        }
+
+        .p-medium {
+            background: #ffaa00;
+            box-shadow: 0 0 6px #ffaa00;
+        }
+
+        .p-low {
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+        }
+
+        .del-btn {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 4px;
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .del-btn:hover {
+            color: var(--red);
+        }
+
+        .empty-msg {
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            color: var(--border);
+            text-align: center;
+            padding: 2rem 0;
+            letter-spacing: 2px;
+        }
+
+        .clear-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.8rem;
+        }
+
+        .clear-btn {
+            background: transparent;
+            border: 1px solid #3a1010;
+            color: var(--red);
+            font-family: var(--font-pixel);
+            font-size: 7px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+
+        .clear-btn:hover {
+            background: #1a0000;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../../index.html" class="back-link">← BACK TO PORTFOLIO</a>
+    <div class="header">
+        <h1>TASK_MANAGER.exe</h1>
+        <p>// PRODUCTIVITY TERMINAL — v1.0.0</p>
+    </div>
+    <div class="app">
+        <div class="card">
+            <div class="card-header">// ADD_TASK.sh</div>
+            <div class="input-row">
+                <input class="task-input" id="task-input" type="text" placeholder="Enter a new task..."
+                    maxlength="100" />
+                <select class="priority-sel" id="priority-sel">
+                    <option value="high">HIGH</option>
+                    <option value="medium" selected>MED</option>
+                    <option value="low">LOW</option>
+                </select>
+                <button class="add-btn" onclick="addTask()">[+ ADD]</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">// TASK_LIST.log</div>
+            <div class="stats-row">
+                <div class="stat-chip">TOTAL: <span id="count-total">0</span></div>
+                <div class="stat-chip">DONE: <span id="count-done">0</span></div>
+                <div class="stat-chip">PENDING: <span id="count-pending">0</span></div>
+            </div>
+            <div class="filter-row">
+                <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">ALL</button>
+                <button class="filter-btn" data-filter="pending" onclick="setFilter('pending', this)">PENDING</button>
+                <button class="filter-btn" data-filter="done" onclick="setFilter('done', this)">COMPLETED</button>
+                <button class="filter-btn" data-filter="high" onclick="setFilter('high', this)">⬤ HIGH</button>
+            </div>
+            <div class="task-list" id="task-list"></div>
+            <div class="clear-row">
+                <button class="clear-btn" onclick="clearDone()">[CLEAR COMPLETED]</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let tasks = JSON.parse(localStorage.getItem('retro-tasks') || '[]');
+        let currentFilter = 'all';
+
+        function save() { localStorage.setItem('retro-tasks', JSON.stringify(tasks)); }
+
+        function addTask() {
+            const input = document.getElementById('task-input');
+            const priority = document.getElementById('priority-sel').value;
+            const text = input.value.trim();
+            if (!text) { input.style.borderColor = 'var(--red)'; setTimeout(() => input.style.borderColor = '', 600); return; }
+            tasks.unshift({ id: Date.now(), text, priority, done: false });
+            save(); input.value = ''; render();
+        }
+
+        function toggleTask(id) {
+            const t = tasks.find(t => t.id === id);
+            if (t) { t.done = !t.done; save(); render(); }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id); save(); render();
+        }
+
+        function clearDone() {
+            tasks = tasks.filter(t => !t.done); save(); render();
+        }
+
+        function setFilter(f, btn) {
+            currentFilter = f;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active'); render();
+        }
+
+        function render() {
+            const list = document.getElementById('task-list');
+            const total = tasks.length, done = tasks.filter(t => t.done).length;
+            document.getElementById('count-total').textContent = total;
+            document.getElementById('count-done').textContent = done;
+            document.getElementById('count-pending').textContent = total - done;
+
+            let filtered = tasks;
+            if (currentFilter === 'done') filtered = tasks.filter(t => t.done);
+            else if (currentFilter === 'pending') filtered = tasks.filter(t => !t.done);
+            else if (currentFilter === 'high') filtered = tasks.filter(t => t.priority === 'high');
+
+            if (!filtered.length) {
+                list.innerHTML = '<div class="empty-msg">// NO TASKS FOUND_</div>';
+                return;
+            }
+            list.innerHTML = filtered.map(t => `
+        <div class="task-item ${t.done ? 'done' : ''}">
+          <button class="check-btn ${t.done ? 'checked' : ''}" onclick="toggleTask(${t.id})">✓</button>
+          <div class="priority-dot p-${t.priority}"></div>
+          <span class="task-text">${t.text}</span>
+          <button class="del-btn" onclick="deleteTask(${t.id})" title="Delete">✕</button>
+        </div>
+      `).join('');
+        }
+
+        document.getElementById('task-input').addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+        render();
+    </script>
+</body>
+
+</html>

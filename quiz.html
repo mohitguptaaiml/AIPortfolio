@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CS QUIZ | Mohit's Portfolio</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Press+Start+2P&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --green: #00ff41;
+            --green-dim: #00cc33;
+            --green-dark: #001a00;
+            --green-faint: #00ff4108;
+            --green-glow: rgba(0, 255, 65, 0.35);
+            --bg: #0a0f0a;
+            --card-bg: #050d05;
+            --border: #1a3a1a;
+            --muted: #4a8a4a;
+            --white: #e0ffe0;
+            --red: #ff3333;
+            --font-mono: 'Share Tech Mono', monospace;
+            --font-vt: 'VT323', monospace;
+            --font-pixel: 'Press Start 2P', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: var(--font-mono);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 65, 0.02) 2px, rgba(0, 255, 65, 0.02) 4px);
+        }
+
+        .back-link {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            letter-spacing: 1px;
+            z-index: 99;
+        }
+
+        .back-link:hover {
+            color: var(--green);
+            border-color: var(--green);
+            box-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .quiz-wrap {
+            width: 100%;
+            max-width: 640px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.08);
+        }
+
+        .card-header {
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            color: var(--green);
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* START SCREEN */
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-screen h1 {
+            font-family: var(--font-vt);
+            font-size: 3.5rem;
+            color: var(--green);
+            text-shadow: 0 0 20px var(--green);
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .start-screen p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .start-btn {
+            background: var(--green);
+            color: #000;
+            border: none;
+            font-family: var(--font-pixel);
+            font-size: 9px;
+            padding: 14px 28px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: all 0.2s;
+        }
+
+        .start-btn:hover {
+            background: #00cc33;
+            box-shadow: 0 0 20px var(--green-glow);
+        }
+
+        /* QUIZ SCREEN */
+        .progress-bar-wrap {
+            background: var(--green-dark);
+            border-radius: 2px;
+            height: 6px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--green);
+            transition: width 0.4s ease;
+            box-shadow: 0 0 8px var(--green);
+        }
+
+        .timer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .timer {
+            font-family: var(--font-vt);
+            font-size: 2rem;
+            color: var(--green);
+            text-shadow: 0 0 10px var(--green);
+        }
+
+        .timer.warn {
+            color: var(--red);
+            text-shadow: 0 0 10px var(--red);
+            animation: blink .6s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .q-num {
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            color: var(--muted);
+        }
+
+        .question {
+            font-size: 18px;
+            color: var(--white);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            min-height: 60px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .opt-btn {
+            background: #000;
+            border: 1px solid var(--border);
+            color: var(--white);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            padding: 12px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .opt-btn:not(.disabled):hover {
+            border-color: var(--green-dim);
+            background: var(--green-dark);
+            color: var(--green);
+        }
+
+        .opt-btn.correct {
+            background: #002a00;
+            border-color: var(--green);
+            color: var(--green);
+            box-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .opt-btn.wrong {
+            background: #2a0000;
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .opt-btn.disabled {
+            cursor: default;
+        }
+
+        .opt-key {
+            font-family: var(--font-pixel);
+            font-size: 7px;
+            color: var(--muted);
+            min-width: 16px;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            min-height: 20px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .feedback.correct {
+            color: var(--green);
+        }
+
+        .feedback.wrong {
+            color: var(--red);
+        }
+
+        .next-btn {
+            display: none;
+            margin-top: 1.2rem;
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--green-dim);
+            color: var(--green);
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: all 0.2s;
+        }
+
+        .next-btn:hover {
+            background: var(--green);
+            color: #000;
+        }
+
+        .next-btn.show {
+            display: block;
+        }
+
+        /* RESULT SCREEN */
+        .result-screen {
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid var(--green);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px var(--green-glow), inset 0 0 20px rgba(0, 255, 65, 0.05);
+        }
+
+        .score-num {
+            font-family: var(--font-vt);
+            font-size: 3.5rem;
+            color: var(--green);
+            text-shadow: 0 0 20px var(--green);
+            line-height: 1;
+        }
+
+        .score-label {
+            font-family: var(--font-pixel);
+            font-size: 7px;
+            color: var(--muted);
+        }
+
+        .result-msg {
+            font-family: var(--font-pixel);
+            font-size: 10px;
+            color: var(--green);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-sub {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 2rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../../index.html" class="back-link">← BACK TO PORTFOLIO</a>
+    <div class="quiz-wrap">
+
+        <!-- START SCREEN -->
+        <div class="card" id="start-screen">
+            <div class="start-screen">
+                <h1>CS_QUIZ.exe</h1>
+                <p>Test your Computer Science fundamentals.<br />10 questions · 20 seconds each · No peeking!</p>
+                <button class="start-btn" onclick="startQuiz()">[[ BOOT QUIZ ]]</button>
+            </div>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div class="card hidden" id="quiz-screen">
+            <div class="card-header">
+                <span>// CS_QUIZ.exe</span>
+                <span id="score-live">SCORE: 0</span>
+            </div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="progress"></div>
+            </div>
+            <div class="timer-row">
+                <div class="q-num" id="q-num">Q 1 / 10</div>
+                <div class="timer" id="timer">20</div>
+            </div>
+            <div class="question" id="question-text"></div>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback"></div>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">[[ NEXT QUESTION >> ]]</button>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div class="card hidden" id="result-screen">
+            <div class="card-header">// RESULT.log</div>
+            <div class="result-screen">
+                <div class="score-circle">
+                    <div class="score-num" id="final-score">0</div>
+                    <div class="score-label">/ 10</div>
+                </div>
+                <div class="result-msg" id="result-msg"></div>
+                <div class="result-sub" id="result-sub"></div>
+                <button class="start-btn" onclick="restartQuiz()">[[ PLAY AGAIN ]]</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const questions = [
+            { q: "What does CPU stand for?", opts: ["Central Processing Unit", "Computer Personal Unit", "Central Program Utility", "Core Processing Unit"], ans: 0 },
+            { q: "Which data structure uses LIFO (Last In First Out) order?", opts: ["Queue", "Stack", "Array", "Linked List"], ans: 1 },
+            { q: "What is the time complexity of Binary Search?", opts: ["O(n)", "O(n²)", "O(log n)", "O(1)"], ans: 2 },
+            { q: "In C++, which keyword is used to define a class?", opts: ["struct", "define", "class", "object"], ans: 2 },
+            { q: "Which of these is NOT a primitive data type in C?", opts: ["int", "float", "string", "char"], ans: 2 },
+            { q: "What does RAM stand for?", opts: ["Read Access Memory", "Random Access Memory", "Run Access Module", "Read And Modify"], ans: 1 },
+            { q: "Which sorting algorithm has the best average-case time complexity?", opts: ["Bubble Sort", "Insertion Sort", "Quick Sort", "Selection Sort"], ans: 2 },
+            { q: "In Python, what is the output of: print(type([]))?", opts: ["<class 'array'>", "<class 'tuple'>", "<class 'set'>", "<class 'list'>"], ans: 3 },
+            { q: "What is the base of the hexadecimal number system?", opts: ["2", "8", "16", "10"], ans: 2 },
+            { q: "Which SQL command is used to retrieve data from a database?", opts: ["FETCH", "GET", "SELECT", "PULL"], ans: 2 }
+        ];
+
+        const keys = ['A', 'B', 'C', 'D'];
+        let currentQ = 0, score = 0, timerInterval = null, timeLeft = 20, answered = false;
+
+        function startQuiz() {
+            currentQ = 0; score = 0; answered = false;
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            clearInterval(timerInterval);
+            timeLeft = 20;
+            const q = questions[currentQ];
+            document.getElementById('q-num').textContent = `Q ${currentQ + 1} / ${questions.length}`;
+            document.getElementById('question-text').textContent = q.q;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('next-btn').classList.remove('show');
+            document.getElementById('score-live').textContent = `SCORE: ${score}`;
+            document.getElementById('progress').style.width = `${(currentQ / questions.length) * 100}%`;
+            updateTimer();
+
+            const opts = document.getElementById('options');
+            opts.innerHTML = q.opts.map((o, i) => `
+        <button class="opt-btn" id="opt-${i}" onclick="answer(${i})">
+          <span class="opt-key">${keys[i]}</span>${o}
+        </button>
+      `).join('');
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                if (timeLeft <= 0) { clearInterval(timerInterval); timeUp(); }
+            }, 1000);
+        }
+
+        function updateTimer() {
+            const t = document.getElementById('timer');
+            t.textContent = String(timeLeft).padStart(2, '0');
+            t.className = 'timer' + (timeLeft <= 5 ? ' warn' : '');
+        }
+
+        function answer(idx) {
+            if (answered) return;
+            answered = true;
+            clearInterval(timerInterval);
+            const correct = questions[currentQ].ans;
+            document.querySelectorAll('.opt-btn').forEach(b => b.classList.add('disabled'));
+            document.getElementById(`opt-${correct}`).classList.add('correct');
+            const fb = document.getElementById('feedback');
+            if (idx === correct) {
+                score++;
+                document.getElementById('score-live').textContent = `SCORE: ${score}`;
+                fb.textContent = '✓ CORRECT!'; fb.className = 'feedback correct';
+            } else {
+                document.getElementById(`opt-${idx}`).classList.add('wrong');
+                fb.textContent = `✗ WRONG! Answer: ${keys[correct]}`; fb.className = 'feedback wrong';
+            }
+            document.getElementById('next-btn').classList.add('show');
+        }
+
+        function timeUp() {
+            if (answered) return;
+            answered = true;
+            const correct = questions[currentQ].ans;
+            document.querySelectorAll('.opt-btn').forEach(b => b.classList.add('disabled'));
+            document.getElementById(`opt-${correct}`).classList.add('correct');
+            const fb = document.getElementById('feedback');
+            fb.textContent = `⏱ TIME UP! Answer: ${keys[correct]}`; fb.className = 'feedback wrong';
+            document.getElementById('next-btn').classList.add('show');
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            if (currentQ >= questions.length) { showResult(); return; }
+            loadQuestion();
+        }
+
+        function showResult() {
+            clearInterval(timerInterval);
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('progress').style.width = '100%';
+            const msgs = [
+                [0, 3, 'SYSTEM_ERROR.exe', 'Keep studying! You can do this.'],
+                [4, 6, 'NEEDS_UPGRADE.exe', 'Not bad! A bit more practice needed.'],
+                [7, 8, 'GOOD_JOB.exe', 'Solid performance! Almost there.'],
+                [9, 10, 'ELITE_CODER.exe', 'Outstanding! You\'re a CS prodigy! 🎉']
+            ];
+            const [, , m, s] = msgs.find(([min, max]) => score >= min && score <= max);
+            document.getElementById('result-msg').textContent = m;
+            document.getElementById('result-sub').textContent = s;
+        }
+
+        function restartQuiz() { startQuiz(); }
+    </script>
+</body>
+
+</html>
